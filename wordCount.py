@@ -7,18 +7,17 @@ def countWordsInFile():
     blah = open(sys.argv[2], 'w')
     wordcount = {}
 
-    for word in file.read().split():
-        '-' in word
-        '-' not in word
+    for word in file.read().replace('-', ' ').split():
 
         word = re.sub('[^A-Za-z0-9]+', '', word)
-        word = word.lower()
 
+        word = word.lower()
         if word not in wordcount:
             wordcount[word] = 1
         else:
             wordcount[word] += 1
-    for key in wordcount.keys():
+
+    for key in sorted(wordcount.keys()):
         # print("%s %s " % (key, wordcount[key]))
         blah.write("%s %s " % (key, wordcount[key]) + "\n")
     file.close();
