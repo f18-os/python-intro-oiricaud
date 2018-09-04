@@ -7,8 +7,7 @@ def countWordsInFile():
     blah = open(sys.argv[2], 'w')
     wordcount = {}
 
-    for word in file.read().replace('-', ' ').split():
-
+    for word in file.read().replace('-', ' ').replace("‘", ' ').replace("’", ' ').replace("'", ' ').split():
         word = re.sub('[^A-Za-z0-9]+', '', word)
 
         word = word.lower()
