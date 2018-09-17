@@ -15,8 +15,8 @@ outputFname = sys.argv[2]
 inputFname = sys.argv[3]
 
 #first check to make sure program exists
-if not os.path.exists("wordCount.py"):
-    print ("wordCount.py doesn't exist! Exiting")
+if not os.path.exists("myShell.py"):
+    print ("myShell.py doesn't exist! Exiting")
     exit()
 
 #make sure text files exist
@@ -25,7 +25,7 @@ if not os.path.exists(textFname):
     exit()
     
 #execute the program with 
-subprocess.call(["python3", "./wordCount.py", textFname, outputFname])
+subprocess.call(["python3", "./myShell.py", textFname, outputFname])
 
 #make sure output file exists
 if not os.path.exists(outputFname):
