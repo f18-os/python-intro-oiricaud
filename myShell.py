@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os, sys, time, re
-import subprocess
+import subprocess as sp
+from subprocess import Popen, PIPE
 
 
 
@@ -23,14 +24,22 @@ def do_state_machine():
 
     except IndexError:
         try:
-            user_input = input('$ ').split(' ')
+            user_input = input('$ ')
             text_file = user_input[1]
             my_command = user_input[0]
             if my_command == "cw":
-                subprocess.call(['./shell/wordCount.py', text_file, my_command])
+                sp.call(['./shell/wordCount.py', my_command, text_file])
                 do_state_machine()
             else:
-                subprocess.call(['./shell/p3-exec.py', text_file, my_command])
+                # user_input = input('$ ').split(' ')
+                # text_file = user_input[1]
+                # my_command = user_input[0]
+                cmd = 'echo "test"'
+                # temp = subprocess.call(['./shell/p3-exec.py', my_command, text_file])
+                # print("alpha1: ", temp)
+                # do_state_machine()
+                pipe = sp.Popen(user_input, stdout=sp.PIPE, shell=True)
+                print("alpha2 ", pipe.communicate()[0])
                 do_state_machine()
 
         except IndexError:

@@ -16,9 +16,12 @@ elif rc == 0:                   # child
     os.write(1, ("Child: My pid==%d.  Parent's pid=%d\n" %
                  (os.getpid(), pid)).encode())
     try:
-        command = sys.argv[2]
+        print("HERE ", sys.argv)
+        command = sys.argv[1]
+        input_file = sys.argv[2]
 
-        args = [command, sys.argv[1]]
+        print("in shell/speech.txt: ", command, input_file)
+        args = [command, input_file]
         print('\n \t\t', args)
         for dir in re.split(":", os.environ['PATH']):  # try each directory in the path
             program = "%s/%s" % (dir, args[0])
