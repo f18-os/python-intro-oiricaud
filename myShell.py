@@ -1,50 +1,68 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os, sys, time, re
-import subprocess as sp
-from subprocess import Popen, PIPE
+import os
+import subprocess
+import sys
+
+from pip._vendor.distlib.compat import raw_input
 
 
-
-def do_state_machine():
-    try:
-        command = sys.argv[1]
-        if command == "cw":  # count words in a text file
-            arg1 = input('Enter file you want to read \n $ ')
-            print(arg1)
-            arg2 = input('Name the file of the output \n $ ')
-            print(arg2)
-           # count_words_in_file(arg1, arg2)
-
-        if command == "pipe":  # waits for process 1 to complete and use it's output for process 2
-            arg1 = input('Enter first command you want to use e.g cat, cw, wc, ls etc. \n $ ')
-            print(arg1)
-            arg2 = input('Enter second command you want to use e.g cat, wc, ls etc. \n $ ')
-            print(arg2)
-
-    except IndexError:
-        try:
-            user_input = input('$ ')
-            text_file = user_input[1]
-            my_command = user_input[0]
-            if my_command == "cw":
-                sp.call(['./shell/wordCount.py', my_command, text_file])
-                do_state_machine()
-            else:
-                # user_input = input('$ ').split(' ')
-                # text_file = user_input[1]
-                # my_command = user_input[0]
-                cmd = 'echo "test"'
-                # temp = subprocess.call(['./shell/p3-exec.py', my_command, text_file])
-                # print("alpha1: ", temp)
-                # do_state_machine()
-                pipe = sp.Popen(user_input, stdout=sp.PIPE, shell=True)
-                print("alpha2 ", pipe.communicate()[0])
-                do_state_machine()
-
-        except IndexError:
-            do_state_machine()
+def do_cat():
+    inp = input("")
+    print(inp)
+    if inp != 'quit':
+        do_cat()
+    else:
+        sys.exit(1)
 
 
-if __name__ == '__main__':
-    do_state_machine()
+def do_cat_file(file_name, my_command):
+    if not os.path.isfile(file_name):
+        print("file does not exist")
+        get_action()
+    else:
+        subprocess.call(['./shell/p3-exec.py', file_name, my_command])
+
+
+def do_ls():
+    dirpath = os.getcwd()
+    print(os.listdir(dirpath))
+
+
+def get_action():
+    inp = input("$ ")
+    num_of_spaces = inp.count(' ')
+    if num_of_spaces > 0:
+        split_me = inp.split(' ')
+        do_cat_file(split_me[1], split_me[0])
+    if inp == 'cat' and num_of_spaces == 0:
+        do_cat()
+    elif inp == 'ls':
+        do_ls()
+    elif inp == 'quit' or inp == 'q' or inp == 'Q' or inp == 'Quit':
+        sys.exit(1)
+    elif inp == "help":
+        print("$ commands you can run: \n >> quit \n >> help \n >> cat")
+    else:
+        print(">> command ", inp, "is invalid type [help] to view commands you can run")
+    get_action()
+
+
+if __name__ == "__main__":
+    get_action()
+
+
+cmd = ["./myShell.py"]
+
+process = subprocess.Popen(cmd,
+                           shell=False,
+                           bufsize=0,
+                           stdin=subprocess.PIPE,
+                           stdout=subprocess.PIPE,
+                           stderr=subprocess.PIPE)
+
+for line in iter(process.stdout.readline, ""):
+    print(line)
+    if line.rstrip() == "$ ":
+        r = raw_input()
+        process.stdin.write(r)

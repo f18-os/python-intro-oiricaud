@@ -16,13 +16,16 @@ elif rc == 0:                   # child
     os.write(1, ("Child: My pid==%d.  Parent's pid=%d\n" %
                  (os.getpid(), pid)).encode())
     try:
-        print("HERE ", sys.argv)
-        command = sys.argv[1]
-        input_file = sys.argv[2]
-
-        print("in shell/speech.txt: ", command, input_file)
-        args = [command, input_file]
-        print('\n \t\t', args)
+        if len(sys.argv) > 1:
+            my_file = sys.argv[1]  # optional flag
+            command = sys.argv[2]
+        else:
+            my_file = ""
+            command = ""
+        if my_file == "":
+            args = [command]
+        print("in shell/speech.txt: ", my_file, " command ", command.split(' ')[0])
+        args = [command, my_file]
         for dir in re.split(":", os.environ['PATH']):  # try each directory in the path
             program = "%s/%s" % (dir, args[0])
             os.write(1, ("Child:  ...trying to exec %s\n" % program).encode())
