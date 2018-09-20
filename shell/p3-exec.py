@@ -19,13 +19,12 @@ elif rc == 0:                   # child
         if len(sys.argv) > 1:
             my_file = sys.argv[1]  # optional flag
             command = sys.argv[2]
+            args = [command, my_file]
         else:
             my_file = ""
             command = ""
-        if my_file == "":
             args = [command]
         print("in shell/speech.txt: ", my_file, " command ", command.split(' ')[0])
-        args = [command, my_file]
         for dir in re.split(":", os.environ['PATH']):  # try each directory in the path
             program = "%s/%s" % (dir, args[0])
             os.write(1, ("Child:  ...trying to exec %s\n" % program).encode())
